@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">FinalProject</string>
+    <string name="login_username"> UserName</string>
+    <string name="login_password"> Password</string>
+    <string name="login_signin">SIGN IN</string>
+    <string name="login_createaccount">Don\'t have an acount yet? Sign up</string>
+    <string name="rate_this">Rate this</string>
+    <string name="you">You</string>
+    <string name="overview">Overview</string>
+    <string name="temp">A volcanic eruption threatens the remaining dinosaurs on the island of Isla Nublar, where the creatures have freely roamed for several years after the demise of an animal theme park known as Jurassic World. Claire Dearing, the former park manager, has now founded the Dinosaur Protection Group, an organization dedicated to protecting the dinosaurs. To help with her cause, Claire has recruited Owen Grady, a former dinosaur trainer who worked at the park, to prevent the extinction of the dinosaurs once again.\"</string>
+    <string name="similar">Similar</string>
+    <string name="seemore">See all</string>
+    <string name="recommend">Recommended for you</string>
+    <string name="watchlist">Watchlist</string>
+    <string name="favourite">Favourite</string>
+    <string name="rated">Rated</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
