@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PopularFragment">
+    tools:context=".Ui.PopularFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/popular_fragment_recyclerview"
@@ -12,5 +12,11 @@
         android:layout_height="match_parent">
 
     </android.support.v7.widget.RecyclerView>
+
+    <ProgressBar
+        android:layout_gravity="center"
+        android:id="@+id/popular_fragment_progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </FrameLayout>

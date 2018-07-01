@@ -6,7 +6,7 @@
     android:padding="8dp"
     android:layout_height="match_parent"
     android:background="@color/background_color"
-    tools:context=".SearchActivity">
+    tools:context=".Ui.SearchActivity">
 
     <EditText
         android:hint="search your movies"

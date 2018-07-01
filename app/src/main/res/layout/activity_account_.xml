@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/background_color"
-    tools:context=".Account_Activity">
+    tools:context=".Ui.Account_Activity">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"

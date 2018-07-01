@@ -6,7 +6,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:background="@color/background_color"
     android:layout_height="match_parent"
-    tools:context=".detailActivity">
+    tools:context=".Ui.detailActivity">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"

@@ -1,8 +1,10 @@
-package com.example.lap60020_local.finalproject;
+package com.example.lap60020_local.finalproject.Ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+
+import com.example.lap60020_local.finalproject.R;
 
 public class LoginActivity extends AppCompatActivity {
 
