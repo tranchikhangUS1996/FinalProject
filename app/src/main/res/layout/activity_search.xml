@@ -1,19 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:padding="8dp"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Ui.SearchActivity">
 
-    <EditText
-        android:hint="search your movies"
-        android:textColorHint="@color/white_color"
-        android:backgroundTint="@color/white_color"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:layout_height="match_parent"
+        android:background="@color/background_color">
+
+    <android.support.design.widget.AppBarLayout
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/search_activity_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height= "?attr/actionBarSize">
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v7.widget.SearchView
+        app:searchIcon="@drawable/search"
         android:id="@+id/search_activity_search_bar"
-        android:drawableLeft="@drawable/search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -24,4 +38,12 @@
 
     </android.support.v7.widget.RecyclerView>
 
-</LinearLayout>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/search_activity_progressbar"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</FrameLayout>

@@ -1,50 +1,37 @@
 package com.example.lap60020_local.finalproject.ViewModel;
 
+import com.example.lap60020_local.finalproject.ModelData.Entity.Movie;
 import com.example.lap60020_local.finalproject.ModelData.Entity.ObservableListData;
-import com.example.lap60020_local.finalproject.ModelData.Params.PageParams;
 import com.example.lap60020_local.finalproject.ModelData.Params.Params;
 import com.example.lap60020_local.finalproject.ModelData.Repository.ListRepositorys.IListRepository;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
-public class MoviesViewModel {
-    private IListRepository listRepository;
+public abstract class MoviesViewModel {
     private int seePossition;
-    private int page = 1;
     private BehaviorSubject<Params> behaviorSubject = BehaviorSubject.create();
 
-    public MoviesViewModel(IListRepository listRepository) {
-        this.listRepository = listRepository;
+    public Observable<ObservableListData> setDataStream() {
+        return initSubject(behaviorSubject).map(data-> new ObservableListData(data, seePossition));
     }
 
-    public void setSeePossition(int possition) {
-        this.seePossition = possition;
+    public abstract Observable<List<Movie>> initSubject(BehaviorSubject<Params> paramsBehaviorSubject);
+
+    public void onScroll(int lastseen) {
+        this.seePossition = lastseen;
     }
 
-    public Observable<ObservableListData> getData(Params params) {
-        params.setPage(page);
-        return listRepository.getData(params).doOnComplete(()->{
-            page++;
-        }).map(data->{
-            return new ObservableListData(data, seePossition);
-        });
-
-    }
-
-    public Observable<ObservableListData> setMoredataStream() {
-        return behaviorSubject.concatMap(params -> {
-            return listRepository.getData(params);
-        }).map(data->{
-           return new ObservableListData(data, seePossition);
-        }).doOnComplete(()->{
-            page++;
-        });
-    }
-
-    public void getMoredata(Params params, int seePossition) {
-        this.seePossition = seePossition;
-        params.setPage(page);
+    public void loadMoreData(Params params) {
+        params.setType(1);
         behaviorSubject.onNext(params);
     }
+
+    public void loadData(Params params) {
+        params.setType(0);
+        behaviorSubject.onNext(params);
+    }
+
 }

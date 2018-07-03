@@ -19,7 +19,12 @@
         <activity android:name=".Ui.LoginActivity" />
         <activity android:name=".Ui.detailActivity" />
         <activity android:name=".Ui.Account_Activity" />
-        <activity android:name=".Ui.SearchActivity"></activity>
+        <activity android:name=".Ui.SearchActivity">
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity android:name=".Ui.WatchListActivity"></activity>
     </application>
 
 </manifest>

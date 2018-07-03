@@ -40,7 +40,9 @@ public class VerticalListAdapter extends RecyclerView.Adapter {
         this.loadMoreNotifier = notifier;
         this.recyclerView = recyclerView;
         Movies = new ArrayList<>();
-        layoutManager = recyclerView.getLayoutManager();
+        layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(this);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -54,7 +56,10 @@ public class VerticalListAdapter extends RecyclerView.Adapter {
                         lastseen = ((GridLayoutManager) layoutManager).findLastVisibleItemPosition();
                         break;
                 }
-                    loadMoreNotifier.loadMore(lastseen);
+                    loadMoreNotifier.onScroll(lastseen);
+                    if(lastseen + 1 == Movies.size()) {
+                        loadMoreNotifier.loadMore();
+                    }
             }
 
             @Override

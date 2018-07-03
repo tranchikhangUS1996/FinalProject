@@ -2,5 +2,7 @@ package com.example.lap60020_local.finalproject.ModelData.Params;
 
 public interface Params {
     int getPage();
-    void setPage(int page)
+    void setPage(int page);
+    int getType();
+    void setType(int type);
 }

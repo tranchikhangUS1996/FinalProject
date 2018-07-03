@@ -2,24 +2,24 @@ package com.example.lap60020_local.finalproject.Ui;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.lap60020_local.finalproject.ModelData.Entity.Movie;
 import com.example.lap60020_local.finalproject.ModelData.Entity.ObservableListData;
 import com.example.lap60020_local.finalproject.ModelData.Params.PageParams;
 import com.example.lap60020_local.finalproject.R;
 import com.example.lap60020_local.finalproject.Ui.Adapter.LoadMoreNotifier;
 import com.example.lap60020_local.finalproject.Ui.Adapter.VerticalListAdapter;
 import com.example.lap60020_local.finalproject.ViewModel.MoviesViewModel;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,36 +50,52 @@ public class PopularFragment extends Fragment implements LoadMoreNotifier {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_popular, container, false);
         ButterKnife.bind(this, v);
+        adater = new VerticalListAdapter(getContext(), this, recyclerView);
         return v;
     }
 
     @Override
-    public void loadMore(int lastSeen) {
-        moviesViewModel.getMoredata(new PageParams(), lastSeen);
+    public void onStart() {
+        super.onStart();
+        bind();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        unbind();
     }
 
     public void bind() {
-        progressBar.setVisibility(View.VISIBLE);
-        disposable.add(moviesViewModel.getData(new PageParams())
+        disposable.add(moviesViewModel.setDataStream()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new PopularObserver()));
-
-        disposable.add(moviesViewModel.setMoredataStream()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(data->{
-                    adater.receiveData(data.getData(),data.getSeePossition());
-                }));
+        moviesViewModel.loadData(new PageParams());
     }
 
     public void unbind() {
         disposable.clear();
+    }
+
+    public void loadData() {
+        assert progressBar != null;
+        progressBar.setVisibility(View.VISIBLE);
+        moviesViewModel.loadData(new PageParams());
+    }
+
+    @Override
+    public void onScroll(int lastseen) {
+        moviesViewModel.onScroll(lastseen);
+    }
+
+    @Override
+    public void loadMore() {
+        moviesViewModel.loadMoreData(new PageParams());
     }
 
     public class PopularObserver extends DisposableObserver<ObservableListData>{
@@ -91,12 +107,14 @@ public class PopularFragment extends Fragment implements LoadMoreNotifier {
 
         @Override
         public void onError(Throwable e) {
+            assert progressBar != null;
             progressBar.setVisibility(View.INVISIBLE);
             Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onComplete() {
+            assert progressBar != null;
             progressBar.setVisibility(View.INVISIBLE);
         }
     }
