@@ -58,7 +58,7 @@
         android:layout_height="wrap_content" />
 
     <TextView
-        android:onClick="onSignUp"
+        android:id="@+id/login_sigup"
         android:layout_marginLeft="18dp"
         android:layout_marginRight="18dp"
         android:layout_width="match_parent"

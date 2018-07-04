@@ -51,6 +51,7 @@
 
                     <ImageView
 
+                        android:id="@+id/account_activity_logout"
                         android:layout_marginRight="5dp"
                         android:layout_marginTop="5dp"
                         android:layout_gravity="end"
@@ -60,6 +61,11 @@
 
                 </FrameLayout>
 
+                <ProgressBar
+                    android:id="@+id/account_activity_progressbar"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
@@ -74,6 +80,7 @@
                     android:layout_height="match_parent">
 
                     <Button
+                        android:id="@+id/account_activity_watchList"
                         android:layout_margin="4dp"
                         android:padding="8dp"
                         android:drawableLeft="@drawable/tag"
@@ -86,6 +93,7 @@
                         android:layout_height="match_parent" />
 
                     <Button
+                        android:id="@+id/account_activity_favorite"
                         android:layout_margin="4dp"
                         android:padding="8dp"
                         android:drawableLeft="@drawable/favorite"
@@ -98,6 +106,7 @@
                         android:layout_height="match_parent" />
 
                     <Button
+                        android:id="@+id/account_activity_rated"
                         android:layout_margin="4dp"
                         android:padding="8dp"
                         android:drawableLeft="@drawable/rating"

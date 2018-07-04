@@ -28,15 +28,18 @@ public class HorizontalListAdapter extends RecyclerView.Adapter {
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     Context context;
+    LoadMoreNotifier notifier;
 
-    public HorizontalListAdapter( RecyclerView recyclerView, RecyclerView.LayoutManager layoutManager, Context context) {
+    public HorizontalListAdapter( RecyclerView recyclerView, Context context, LoadMoreNotifier notifier) {
         Movies = new ArrayList<>();
         this.recyclerView = recyclerView;
         this.layoutManager = layoutManager;
         this.context = context;
+        this.notifier = notifier;
+
     }
 
-    void receiveData(List<Movie> data) {
+    public void receiveData(List<Movie> data) {
         Movies = data;
         notifyDataSetChanged();
     }

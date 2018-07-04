@@ -9,21 +9,21 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
-public class ListViewModel extends MoviesViewModel {
+public class AccountMovieViewModel extends MoviesViewModel {
 
-    private final IListRepository listRepository;
+    private IListRepository repository;
 
-    public ListViewModel(IListRepository listRepository) {
-        this.listRepository = listRepository;
+    public AccountMovieViewModel(IListRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public Observable<List<Movie>> initSubject(BehaviorSubject<Params> paramsBehaviorSubject) {
         return paramsBehaviorSubject.concatMap(params -> {
-            if(params.getPage() == 0) {
-                return listRepository.requetData(params);
+            if(params.getType() == 0) {
+                return repository.requetData(params);
             }
-            else return listRepository.requestMoreData(params);
+            else return repository.requestMoreData(params);
         });
     }
 }
