@@ -20,4 +20,5 @@
     <string name="popular_tab">Popular</string>
     <string name="toprated_tab">Top Rated</string>
     <string name="search_hint">search your movie</string>
+    <string name="email">E-mail:email@gmail.com</string>
 </resources>

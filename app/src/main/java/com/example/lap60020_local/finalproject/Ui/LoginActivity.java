@@ -42,6 +42,6 @@ public class LoginActivity extends AppCompatActivity {
     @Optional
     @OnClick(R.id.login_signin)
     public void onSignin(View v) {
-        disposable.add(loginViewModel.login())
+        //disposable.add(loginViewModel.login())
     }
 }

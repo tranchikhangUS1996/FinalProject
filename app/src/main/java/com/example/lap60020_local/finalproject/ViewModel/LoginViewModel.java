@@ -17,15 +17,15 @@ public class LoginViewModel {
         this.loginRepository = loginRepository;
     }
 
-    public Observable<AuthenticationSessionID> login(LoginParams params) {
-
-        Observable<LoginParams> paramsObservable = Observable.just(params);
-        Observable<Authentication> authenticationObservable = loginRepository.getToken();
-        return Observable.zip(paramsObservable,authenticationObservable, (p,t)->{
-            return loginRepository.getLoginToken(t.requestToken,p);
-        }).flatMap(observable ->{
-
-        });
-    }
+//    public Observable<AuthenticationSessionID> login(LoginParams params) {
+//
+//        Observable<LoginParams> paramsObservable = Observable.just(params);
+//        Observable<Authentication> authenticationObservable = loginRepository.getToken();
+//        return Observable.zip(paramsObservable,authenticationObservable, (p,t)->{
+//            return loginRepository.getLoginToken(t.requestToken,p);
+//        }).flatMap(observable ->{
+//
+//        });
+//    }
 
 }
