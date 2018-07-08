@@ -36,9 +36,6 @@ import io.reactivex.schedulers.Schedulers;
 public class PopularFragment extends Fragment implements LoadMoreNotifier {
 
     @Nullable
-    @BindView(R.id.popular_fragment_progressbar)
-    ProgressBar progressBar;
-    @Nullable
     @BindView(R.id.popular_fragment_recyclerview)
     RecyclerView recyclerView;
     VerticalListAdapter adater;
@@ -73,20 +70,15 @@ public class PopularFragment extends Fragment implements LoadMoreNotifier {
     }
 
     public void bind() {
-        disposable.add(moviesViewModel.setDataStream()
+        adater.addLoading();
+        disposable.add(moviesViewModel.loadData(new PageParams())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new PopularObserver()));
-        moviesViewModel.loadData(new PageParams());
     }
 
     public void unbind() {
         disposable.clear();
-    }
-
-    public void loadData() {
-        assert progressBar != null;
-        progressBar.setVisibility(View.VISIBLE);
-        moviesViewModel.loadData(new PageParams());
     }
 
     @Override
@@ -96,7 +88,11 @@ public class PopularFragment extends Fragment implements LoadMoreNotifier {
 
     @Override
     public void loadMore() {
-        moviesViewModel.loadMoreData(new PageParams());
+        adater.addLoading();
+        disposable.add(moviesViewModel.loadMoreData(new PageParams())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new PopularObserver()));
     }
 
     public class PopularObserver extends DisposableObserver<ObservableListData>{
@@ -105,22 +101,18 @@ public class PopularFragment extends Fragment implements LoadMoreNotifier {
         public void onNext(ObservableListData data) {
             adater.receiveData(data.getData(), data.getSeePossition());
             moviesViewModel.acceptLoad();
-            progressBar.setVisibility(View.INVISIBLE);
         }
 
         @Override
         public void onError(Throwable e) {
-            assert progressBar != null;
-            progressBar.setVisibility(View.INVISIBLE);
             moviesViewModel.acceptLoad();
+            adater.removeLoading();
             Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onComplete() {
-            assert progressBar != null;
-            progressBar.setVisibility(View.INVISIBLE);
-            moviesViewModel.acceptLoad();
+            adater.removeLoading();
         }
     }
 }

@@ -85,11 +85,10 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     }
 
     public void bind() {
-        disposable.add(moviesViewModel.setDataStream()
+        disposable.add(moviesViewModel.loadData(new SearchParams(mSearch.getQuery().toString()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new SearchObserver()));
-        moviesViewModel.loadData(new SearchParams(mSearch.getQuery().toString()));
     }
 
     public void unbind() {
@@ -103,7 +102,10 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
     @Override
     public void loadMore() {
-        moviesViewModel.loadMoreData(new SearchParams(mSearch.getQuery().toString()));
+        disposable.add(moviesViewModel.loadMoreData(new SearchParams(mSearch.getQuery().toString()))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new SearchObserver()));
     }
 
     public class SearchObserver extends DisposableObserver<ObservableListData> {
@@ -121,6 +123,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
         @Override
         public void onComplete() {
+            moviesViewModel.acceptLoad();
             progressBar.setVisibility(View.INVISIBLE);
         }
     }
@@ -128,14 +131,20 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     @Override
     public boolean onQueryTextSubmit(String query) {
         onScroll(0);
-        moviesViewModel.loadData(new SearchParams(query));
+        disposable.add(moviesViewModel.loadData(new SearchParams(query))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new SearchObserver()));
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        moviesViewModel.onScroll(0);
-        moviesViewModel.loadData(new SearchParams(newText));
+//        moviesViewModel.onScroll(0);
+//        disposable.add(moviesViewModel.loadData(new SearchParams(newText))
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeWith(new SearchObserver()));
         return false;
     }
 }

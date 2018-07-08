@@ -3,28 +3,16 @@ package com.example.lap60020_local.finalproject.ViewModel;
 import com.example.lap60020_local.finalproject.ModelData.Entity.Movie;
 import com.example.lap60020_local.finalproject.ModelData.Entity.ObservableListData;
 import com.example.lap60020_local.finalproject.ModelData.Params.Params;
-import com.example.lap60020_local.finalproject.ModelData.Repository.ListRepositorys.IListRepository;
-
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Predicate;
-import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subjects.BehaviorSubject;
-import io.reactivex.subjects.PublishSubject;
+
 
 public abstract class MoviesViewModel {
     private int seePossition;
-    private PublishSubject<Params> behaviorSubject = PublishSubject.create();
      boolean loading = false;
 
-    public Observable<ObservableListData> setDataStream() {
-
-        return initSubject(behaviorSubject).map(data-> new ObservableListData(data, seePossition));
-    }
-
-    public abstract Observable<List<Movie>> initSubject(Observable<Params> paramsBehaviorSubject);
+    public abstract Observable<List<Movie>> initSubject(Observable<Params> observable);
 
     public void onScroll(int lastseen) {
         this.seePossition = lastseen;
@@ -34,15 +22,14 @@ public abstract class MoviesViewModel {
         loading = false;
     }
 
-    public void loadMoreData(Params params) {
+    public Observable<ObservableListData> loadMoreData(Params params) {
         params.setType(1);
-        behaviorSubject.onNext(params);
+        return initSubject(Observable.just(params)).map(list-> new ObservableListData(list, seePossition));
     }
 
-    public void loadData(Params params) {
+    public Observable<ObservableListData> loadData(Params params) {
         params.setType(0);
-
-        behaviorSubject.onNext(params);
+        return initSubject(Observable.just(params)).map(list-> new ObservableListData(list, seePossition));
     }
 
 }

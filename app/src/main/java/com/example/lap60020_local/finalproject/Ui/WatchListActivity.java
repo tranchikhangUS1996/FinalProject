@@ -90,15 +90,17 @@ public class WatchListActivity extends AppCompatActivity implements LoadMoreNoti
 
     @Override
     public void loadMore() {
-        moviesViewModel.loadMoreData(params);
-    }
-
-    public void bind() {
-        disposable.add(moviesViewModel.setDataStream()
+        disposable.add(moviesViewModel.loadMoreData(params)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new WatchlistObserver()));
-        moviesViewModel.loadData(params);
+    }
+
+    public void bind() {
+        disposable.add(moviesViewModel.loadData(params)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new WatchlistObserver()));
     }
 
     public void unbind() {

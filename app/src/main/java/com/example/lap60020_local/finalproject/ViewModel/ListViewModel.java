@@ -23,8 +23,8 @@ public class ListViewModel extends MoviesViewModel {
     }
 
     @Override
-    public Observable<List<Movie>> initSubject(Observable<Params> paramsBehaviorSubject) {
-        return paramsBehaviorSubject.observeOn(Schedulers.io())
+    public Observable<List<Movie>> initSubject(Observable<Params> observable) {
+        return observable
                 .filter(params -> !loading).concatMap(params -> {
                     Log.d("Debug", Thread.currentThread().getName() + " concatmap");
                     loading = true;

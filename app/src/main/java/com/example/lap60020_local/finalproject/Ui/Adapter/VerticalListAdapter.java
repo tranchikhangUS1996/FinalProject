@@ -33,7 +33,7 @@ public class VerticalListAdapter extends RecyclerView.Adapter {
     private LoadMoreNotifier loadMoreNotifier;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    int addition = 1;
+    int addition = 0;
 
     public VerticalListAdapter(Context context, LoadMoreNotifier notifier, RecyclerView recyclerView) {
         this.context = context;
@@ -57,7 +57,7 @@ public class VerticalListAdapter extends RecyclerView.Adapter {
                         break;
                 }
                     loadMoreNotifier.onScroll(lastseen);
-                    if(lastseen  == Movies.size()) {
+                    if(lastseen + 1  == Movies.size()) {
                         loadMoreNotifier.loadMore();
                     }
             }

@@ -117,18 +117,16 @@ public class DetailActivity extends AppCompatActivity {
         detailViewModel.bindData();
 
         RecomendProgressbar.setVisibility(View.VISIBLE);
-        disposable.add(recommendViewModel.setDataStream()
+        disposable.add(recommendViewModel.loadData(new RecommendParams(id))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new RecommendObserver()));
-        recommendViewModel.loadData(new RecommendParams(id));
 
         SimilarProgressbar.setVisibility(View.VISIBLE);
-        disposable.add(similarViewModel.setDataStream()
+        disposable.add(similarViewModel.loadData(new SimilarParams(id))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new SimilarObserver()));
-        similarViewModel.loadData(new SimilarParams(id));
     }
 
     public void unbind() {
@@ -145,11 +143,13 @@ public class DetailActivity extends AppCompatActivity {
         @Override
         public void onError(Throwable e) {
             RecomendProgressbar.setVisibility(View.INVISIBLE);
+            recommendViewModel.acceptLoad();
         }
 
         @Override
         public void onComplete() {
             RecomendProgressbar.setVisibility(View.INVISIBLE);
+            recommendViewModel.acceptLoad();
         }
     }
 
@@ -163,11 +163,13 @@ public class DetailActivity extends AppCompatActivity {
         @Override
         public void onError(Throwable e) {
             SimilarProgressbar.setVisibility(View.INVISIBLE);
+            similarViewModel.acceptLoad();
         }
 
         @Override
         public void onComplete() {
             SimilarProgressbar.setVisibility(View.INVISIBLE);
+            similarViewModel.acceptLoad();
         }
     }
 
