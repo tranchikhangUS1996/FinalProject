@@ -3,6 +3,7 @@ package com.example.lap60020_local.finalproject;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,8 +16,7 @@ import java.util.ArrayList;
 
 public class ReviewListActivity extends AppCompatActivity {
 
-    ListView lvDS;
-    MyAdapterCustom adapter;
+    RecyclerView rvContacts;
     ArrayList<Reviews> arr_ds = new ArrayList<Reviews>();
 
     @Override
@@ -26,19 +26,23 @@ public class ReviewListActivity extends AppCompatActivity {
 
         initArray();
 
-        lvDS = (ListView) findViewById(R.id.lvDanhSach);
-        adapter = new MyAdapterCustom(ReviewListActivity.this, arr_ds);
-        lvDS.setAdapter(adapter);
+        rvContacts = (RecyclerView) findViewById(R.id.rvContacts);
+        // Create adapter passing in the sample user data
+        ReviewAdapter adapter = new ReviewAdapter(arr_ds);
+        // Attach the adapter to the recyclerview to populate items
+        rvContacts.setAdapter(adapter);
+        // Set layout manager to position the items
+        rvContacts.setLayoutManager(new LinearLayoutManager(this));
 
-        lvDS.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Intent intent = new Intent(ReviewListActivity.this, ReviewDetail.class);
-                intent.putExtra("name", arr_ds.get(position).getTen().toString());
-                intent.putExtra("content", arr_ds.get(position).getContent().toString());
-                startActivity(intent);
-            }
-        });
+//        rvContacts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+//                Intent intent = new Intent(ReviewListActivity.this, ReviewDetail.class);
+//                intent.putExtra("name", arr_ds.get(position).getTen().toString());
+//                intent.putExtra("content", arr_ds.get(position).getContent().toString());
+//                startActivity(intent);
+//            }
+//        });
 
     }
 
