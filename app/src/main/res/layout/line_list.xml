@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tvIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:text="S"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:background="@drawable/circle_drawable"
+        android:textAllCaps="true"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvTen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Steve" />
+
+        <TextView
+            android:id="@+id/tvContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:justificationMode="inter_word"
+            android:text="A review by Steve. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus mollis imperdiet finibus. Etiam quis augue lacus. Donec viverra mi a neque tristique, sit amet dictum augue imperdiet. Integer posuere vehicula fringilla. Nam nec ex ut libero cursus viverra ut rutrum turpis. Proin ac imperdiet elit, ac iaculis lectus." />
+
+        <!--<WebView-->
+            <!--android:id="@+id/wvContent"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content" />-->
+    </LinearLayout>
+</LinearLayout>

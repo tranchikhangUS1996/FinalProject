@@ -10,8 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Ui.MainActivity">
-        </activity>
+        <activity android:name=".Ui.MainActivity" />
         <activity android:name=".Ui.LoginActivity" />
         <activity android:name=".Ui.detailActivity" />
         <activity android:name=".Ui.Account_Activity" />
@@ -21,13 +20,15 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity android:name=".Ui.WatchListActivity" />
-        <activity android:name=".AboutActivity">
+        <activity android:name=".AboutActivity" ></activity>
+        <activity android:name=".ReviewListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ReviewDetail"></activity>
     </application>
 
 </manifest>
