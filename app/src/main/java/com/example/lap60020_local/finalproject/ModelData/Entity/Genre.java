@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName;
 public class Genre {
 
     @SerializedName("id")
-    public Integer id;
+    private Integer id;
     @SerializedName("name")
-    public String name;
+    private String name;
 
     public Genre(Integer id, String name) {
         this.id = id;

@@ -8,20 +8,30 @@ import com.example.lap60020_local.finalproject.ModelData.Repository.ListReposito
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Predicate;
+import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.subjects.PublishSubject;
 
 public abstract class MoviesViewModel {
     private int seePossition;
-    private BehaviorSubject<Params> behaviorSubject = BehaviorSubject.create();
+    private PublishSubject<Params> behaviorSubject = PublishSubject.create();
+     boolean loading = false;
 
     public Observable<ObservableListData> setDataStream() {
+
         return initSubject(behaviorSubject).map(data-> new ObservableListData(data, seePossition));
     }
 
-    public abstract Observable<List<Movie>> initSubject(BehaviorSubject<Params> paramsBehaviorSubject);
+    public abstract Observable<List<Movie>> initSubject(Observable<Params> paramsBehaviorSubject);
 
     public void onScroll(int lastseen) {
         this.seePossition = lastseen;
+    }
+
+    public void acceptLoad() {
+        loading = false;
     }
 
     public void loadMoreData(Params params) {
@@ -31,6 +41,7 @@ public abstract class MoviesViewModel {
 
     public void loadData(Params params) {
         params.setType(0);
+
         behaviorSubject.onNext(params);
     }
 

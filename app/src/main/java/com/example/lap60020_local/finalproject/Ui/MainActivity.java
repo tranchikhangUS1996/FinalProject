@@ -27,9 +27,11 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.lap60020_local.finalproject.ModelData.Entity.Genre;
+import com.example.lap60020_local.finalproject.MyApplication;
 import com.example.lap60020_local.finalproject.R;
 import com.example.lap60020_local.finalproject.Ui.Adapter.GenrelistAdapter;
 import com.example.lap60020_local.finalproject.ViewModel.GenreViewModel;
+import com.example.lap60020_local.finalproject.ViewModel.MoviesViewModel;
 
 import java.util.List;
 
@@ -61,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.main_activity_pager)
     ViewPager mViewPager;
 
-    private GenreViewModel mainViewModel;
+    private GenreViewModel genreViewModel;
     private CompositeDisposable disposable;
 
     @Override
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        genreViewModel = ((MyApplication) getApplication()).getGenreViewModel();
         context = this;
         setSupportActionBar(mToolbar);
         MyPageAdapter adapter = new MyPageAdapter(getSupportFragmentManager());
@@ -91,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void bind() {
         progressBar.setVisibility(View.VISIBLE);
-        disposable.add(mainViewModel.getListGenre()
+        disposable.add(genreViewModel.getListGenre()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new GenreObserver()));
@@ -132,8 +135,8 @@ public class MainActivity extends AppCompatActivity {
         MenuItem accountItem = menu.findItem(R.id.main_menu_account);
         mAccountImage = (ImageView) accountItem.getActionView();
         mAccountImage.setOnClickListener(v->{
-            // chuyen den activity account
-            // or chuyen den login acctivity
+            Intent intent = new Intent(this, Account_Activity.class);
+            startActivity(intent);
         });
         mAccountImage.setImageResource(R.drawable.usernotlogin);
         return super.onCreateOptionsMenu(menu);
@@ -145,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, SearchActivity.class);
             startActivity(intent);
         }
+
         return super.onOptionsItemSelected(item);
     }
 

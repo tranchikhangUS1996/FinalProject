@@ -1,5 +1,6 @@
 package com.example.lap60020_local.finalproject.Ui;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,12 +11,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.example.lap60020_local.finalproject.ListRepositoryFactory;
 import com.example.lap60020_local.finalproject.ModelData.Entity.ObservableListData;
 import com.example.lap60020_local.finalproject.ModelData.Params.Params;
+import com.example.lap60020_local.finalproject.ModelData.Repository.ListRepositorys.IListRepository;
 import com.example.lap60020_local.finalproject.R;
 import com.example.lap60020_local.finalproject.Ui.Adapter.LoadMoreNotifier;
 import com.example.lap60020_local.finalproject.Ui.Adapter.VerticalListAdapter;
+import com.example.lap60020_local.finalproject.ViewModel.ListViewModel;
 import com.example.lap60020_local.finalproject.ViewModel.MoviesViewModel;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,6 +48,12 @@ public class WatchListActivity extends AppCompatActivity implements LoadMoreNoti
     private CompositeDisposable disposable;
     private Params params;
 
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onReceiveParams(Params params) {
+        this.params = params;
+        bind();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,9 +64,23 @@ public class WatchListActivity extends AppCompatActivity implements LoadMoreNoti
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
         adapter = new VerticalListAdapter(this, this, recyclerView);
-        moviesViewModel = (MoviesViewModel) getIntent().getExtras().get("VIEWMODEL");
-        params = (Params) getIntent().getExtras().get("PARAMS");
+        String type = getIntent().getExtras().getString("Type");
+        IListRepository iListRepository = ListRepositoryFactory.get(type);
+        moviesViewModel = new ListViewModel(iListRepository);
         disposable = new CompositeDisposable();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+        unbind();
     }
 
     @Override

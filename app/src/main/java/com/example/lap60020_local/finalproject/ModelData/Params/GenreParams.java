@@ -1,35 +1,33 @@
 package com.example.lap60020_local.finalproject.ModelData.Params;
 
-public class SimilarParams implements Params {
-
-    private int page;
-    private int type;
+public class GenreParams implements Params {
     private int id;
 
-    public SimilarParams(int id) {
+    public GenreParams(int id) {
         this.id = id;
     }
 
     public int getId() {
         return id;
     }
+
     @Override
     public int getPage() {
-        return page;
+        return 0;
     }
 
     @Override
     public void setPage(int page) {
-        this.page = page;
+
     }
 
     @Override
     public int getType() {
-        return type;
+        return 0;
     }
 
     @Override
     public void setType(int type) {
-        this.type = type;
+
     }
 }

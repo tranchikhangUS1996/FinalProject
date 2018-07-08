@@ -33,8 +33,8 @@ public class GenrelistAdapter extends RecyclerView.Adapter<GenrelistAdapter.myVi
     @Override
     public void onBindViewHolder(@NonNull myViewholder holder, int position) {
         Genre genre = genres.get(position);
-        holder.item.setText(genre.name);
-        holder.cardView.setOnClickListener(new onCardClick(genre.id));
+        holder.item.setText(genre.getName());
+        holder.cardView.setOnClickListener(new onCardClick(genre.getId()));
     }
 
     @Override

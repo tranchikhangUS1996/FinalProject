@@ -17,12 +17,12 @@ import com.example.lap60020_local.finalproject.ModelData.Entity.ObservableListDa
 import com.example.lap60020_local.finalproject.ModelData.Params.RecommendParams;
 import com.example.lap60020_local.finalproject.ModelData.Params.SimilarParams;
 import com.example.lap60020_local.finalproject.ModelData.retrofit.MyApiClient;
+import com.example.lap60020_local.finalproject.MyApplication;
 import com.example.lap60020_local.finalproject.R;
 import com.example.lap60020_local.finalproject.Ui.Adapter.HorizontalListAdapter;
 import com.example.lap60020_local.finalproject.ViewModel.DetailViewModel;
 import com.example.lap60020_local.finalproject.ViewModel.MoviesViewModel;
 
-import butterknife.BindFont;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -32,7 +32,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
-public class detailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity {
 
     @BindView(R.id.detail_toolbar)
     @Nullable Toolbar toolbar;
@@ -79,11 +79,17 @@ public class detailActivity extends AppCompatActivity {
     private HorizontalListAdapter SimilarAdapter;
     private HorizontalListAdapter RecommenedAdapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
+        detailViewModel = ((MyApplication) getApplication()).getDetailViewModel();
+        similarViewModel = ((MyApplication) getApplication()).getSimilarViewModel();
+        recommendViewModel = ((MyApplication) getApplication()).getRecommendedViewModel();
+        SimilarAdapter = new HorizontalListAdapter(similarRecyclerView ,this);
+        RecommenedAdapter = new HorizontalListAdapter(recommendRecyclerView, this);
         disposable = new CompositeDisposable();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

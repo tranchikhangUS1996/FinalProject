@@ -8,6 +8,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.subjects.PublishSubject;
 
 public class AccountMovieViewModel extends MoviesViewModel {
 
@@ -18,7 +19,7 @@ public class AccountMovieViewModel extends MoviesViewModel {
     }
 
     @Override
-    public Observable<List<Movie>> initSubject(BehaviorSubject<Params> paramsBehaviorSubject) {
+    public Observable<List<Movie>> initSubject(Observable<Params> paramsBehaviorSubject) {
         return paramsBehaviorSubject.concatMap(params -> {
             if(params.getType() == 0) {
                 return repository.requetData(params);

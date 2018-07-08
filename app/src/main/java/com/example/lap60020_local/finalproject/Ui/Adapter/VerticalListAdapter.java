@@ -33,7 +33,7 @@ public class VerticalListAdapter extends RecyclerView.Adapter {
     private LoadMoreNotifier loadMoreNotifier;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    int addition = 0;
+    int addition = 1;
 
     public VerticalListAdapter(Context context, LoadMoreNotifier notifier, RecyclerView recyclerView) {
         this.context = context;
@@ -57,7 +57,7 @@ public class VerticalListAdapter extends RecyclerView.Adapter {
                         break;
                 }
                     loadMoreNotifier.onScroll(lastseen);
-                    if(lastseen + 1 == Movies.size()) {
+                    if(lastseen  == Movies.size()) {
                         loadMoreNotifier.loadMore();
                     }
             }
@@ -130,7 +130,7 @@ public class VerticalListAdapter extends RecyclerView.Adapter {
         else if(holder instanceof MyViewHolder) {
             MyViewHolder myViewHolder = (MyViewHolder) holder;
             myViewHolder.tittle.setText(movie.getTitle());
-            myViewHolder.rate.setText(String.format("%0.2f",movie.getVoteAverage()).toString());
+            myViewHolder.rate.setText(String.valueOf(movie.getVoteAverage()));
             myViewHolder.releaseDate.setText(movie.getReleaseDate());
             myViewHolder.review.setText(movie.getOverview());
             myViewHolder.cardView.setOnClickListener(new onCardClick(movie.getId()));
@@ -156,7 +156,9 @@ public class VerticalListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        if(position == Movies.size()) return -1;
+        if(position == Movies.size()) {
+            return -1;
+        }
         return this.TypeOfList;
     }
 

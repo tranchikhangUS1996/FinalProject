@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.lap60020_local.finalproject.ModelData.Entity.ObservableListData;
 import com.example.lap60020_local.finalproject.ModelData.Params.PageParams;
+import com.example.lap60020_local.finalproject.MyApplication;
 import com.example.lap60020_local.finalproject.R;
 import com.example.lap60020_local.finalproject.Ui.Adapter.LoadMoreNotifier;
 import com.example.lap60020_local.finalproject.Ui.Adapter.VerticalListAdapter;
@@ -43,7 +44,7 @@ public class TopratedFragment extends Fragment implements LoadMoreNotifier{
     MoviesViewModel moviesViewModel;
 
     public TopratedFragment() {
-        // Required empty public constructor
+        disposable = new CompositeDisposable();
     }
 
 
@@ -53,6 +54,7 @@ public class TopratedFragment extends Fragment implements LoadMoreNotifier{
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_toprated, container, false);
         ButterKnife.bind(this, v);
+        moviesViewModel = ((MyApplication) getActivity().getApplication()).getTopratedViewModel();
         adater = new VerticalListAdapter(getContext(), this, recyclerView);
         return v;
     }
@@ -60,7 +62,7 @@ public class TopratedFragment extends Fragment implements LoadMoreNotifier{
     @Override
     public void onStart() {
         super.onStart();
-        bind();
+//        bind();
     }
 
     @Override
@@ -71,7 +73,6 @@ public class TopratedFragment extends Fragment implements LoadMoreNotifier{
 
     public void bind() {
         disposable.add(moviesViewModel.setDataStream()
-                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new TopratedObserver()));
         moviesViewModel.loadData(new PageParams());
@@ -79,12 +80,6 @@ public class TopratedFragment extends Fragment implements LoadMoreNotifier{
 
     public void unbind() {
         disposable.clear();
-    }
-
-    public void loadData() {
-        assert progressBar != null;
-        progressBar.setVisibility(View.VISIBLE);
-        moviesViewModel.loadData(new PageParams());
     }
 
     @Override
@@ -102,18 +97,22 @@ public class TopratedFragment extends Fragment implements LoadMoreNotifier{
         @Override
         public void onNext(ObservableListData data) {
             adater.receiveData(data.getData(), data.getSeePossition());
+            moviesViewModel.acceptLoad();
+            progressBar.setVisibility(View.INVISIBLE);
         }
 
         @Override
         public void onError(Throwable e) {
             assert progressBar != null;
             progressBar.setVisibility(View.INVISIBLE);
+            moviesViewModel.acceptLoad();
             Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onComplete() {
             assert progressBar != null;
+            moviesViewModel.acceptLoad();
             progressBar.setVisibility(View.INVISIBLE);
         }
     }

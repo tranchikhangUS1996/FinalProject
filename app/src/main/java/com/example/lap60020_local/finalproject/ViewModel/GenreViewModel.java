@@ -11,6 +11,10 @@ public class GenreViewModel {
 
     private IGenreRepository genreRepository;
 
+    public GenreViewModel(IGenreRepository genreRepository) {
+        this.genreRepository = genreRepository;
+    }
+
     public Observable<List<Genre>> getListGenre() {
         return genreRepository.getListGenre();
     }

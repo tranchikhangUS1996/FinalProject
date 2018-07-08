@@ -10,4 +10,5 @@ import io.reactivex.Observable;
 public interface IListRepository {
     Observable<List<Movie>> requetData(Params params);
     Observable<List<Movie>> requestMoreData(Params params);
+    String getName();
 }

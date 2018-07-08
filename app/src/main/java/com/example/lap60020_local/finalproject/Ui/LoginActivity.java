@@ -5,7 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.example.lap60020_local.finalproject.ModelData.Entity.AuthenticationSessionID;
+import com.example.lap60020_local.finalproject.ModelData.Params.LoginParams;
+import com.example.lap60020_local.finalproject.MyApplication;
 import com.example.lap60020_local.finalproject.R;
 import com.example.lap60020_local.finalproject.ViewModel.LoginViewModel;
 
@@ -13,7 +17,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -31,6 +38,20 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        loginViewModel = ((MyApplication) getApplication()).getLoginViewModel();
+        disposable = new CompositeDisposable();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        bind();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unbind();
     }
 
     @Optional
@@ -42,6 +63,37 @@ public class LoginActivity extends AppCompatActivity {
     @Optional
     @OnClick(R.id.login_signin)
     public void onSignin(View v) {
-        disposable.add(loginViewModel.login())
+        LoginParams params = new LoginParams(username.getText().toString(),password.getText().toString());
+        loginViewModel.login(params);
+    }
+
+    public void bind() {
+        disposable.add(loginViewModel.loginStream()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new LoginObserver()));
+    }
+
+    public void unbind() {
+        disposable.clear();
+    }
+
+    class LoginObserver extends DisposableObserver<AuthenticationSessionID> {
+
+        @Override
+        public void onNext(AuthenticationSessionID authenticationSessionID) {
+            MyApplication application = (MyApplication) getApplication();
+            application.setSessionId(authenticationSessionID.sessionId);
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Toast.makeText(getApplicationContext(), e.getMessage(),Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onComplete() {
+            Toast.makeText(getApplicationContext(), "Log in success!", Toast.LENGTH_SHORT).show();
+        }
     }
 }

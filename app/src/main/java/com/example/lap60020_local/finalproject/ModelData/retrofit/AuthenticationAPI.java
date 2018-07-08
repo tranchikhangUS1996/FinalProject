@@ -6,20 +6,21 @@ import com.example.lap60020_local.finalproject.ModelData.Entity.AuthenticationSe
 import com.example.lap60020_local.finalproject.ModelData.Entity.AuthenticationWithLogin;
 
 import io.reactivex.Observable;
+import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface AuthenticationAPI {
     @GET("authentication/token/new")
-    Observable<Authentication> getToken(@Query("api_key") String apiKey);
+    Call<Authentication> getToken(@Query("api_key") String apiKey);
 
     @GET("authentication/token/validate_with_login")
-    Observable<AuthenticationWithLogin> getLoginToken(@Query("username") String userName,
+    Call<AuthenticationWithLogin> getLoginToken(@Query("username") String userName,
                                                       @Query("password") String password,
                                                       @Query("request_token") String token,
                                                       @Query("api_key") String apiKey );
     @GET("authentication/session/new")
-    Observable<AuthenticationSessionID> getSessionID(@Query("request_token") String requesToken,
+    Call<AuthenticationSessionID> getSessionID(@Query("request_token") String requesToken,
                                                      @Query("api_key") String apiKey);
 
     @GET("account")

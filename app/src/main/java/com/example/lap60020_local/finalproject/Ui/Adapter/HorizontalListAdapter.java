@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -26,17 +27,16 @@ public class HorizontalListAdapter extends RecyclerView.Adapter {
 
     List<Movie> Movies;
     RecyclerView recyclerView;
-    RecyclerView.LayoutManager layoutManager;
     Context context;
-    LoadMoreNotifier notifier;
+    LinearLayoutManager linearLayoutManager;
 
-    public HorizontalListAdapter( RecyclerView recyclerView, Context context, LoadMoreNotifier notifier) {
+    public HorizontalListAdapter( RecyclerView recyclerView, Context context) {
         Movies = new ArrayList<>();
         this.recyclerView = recyclerView;
-        this.layoutManager = layoutManager;
         this.context = context;
-        this.notifier = notifier;
-
+        linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(this);
     }
 
     public void receiveData(List<Movie> data) {
@@ -54,7 +54,7 @@ public class HorizontalListAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Movie movie = Movies.get(position);
-        VerticalListAdapter.MySingleViewholder singleViewholder = (VerticalListAdapter.MySingleViewholder) holder;
+        MySingleViewholder singleViewholder = (MySingleViewholder) holder;
         singleViewholder.date.setText(movie.getReleaseDate());
         singleViewholder.cardView.setOnClickListener(new onCardClick(movie.getId()));
         if(movie.isWatchlist()) {

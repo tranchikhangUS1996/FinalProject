@@ -50,11 +50,13 @@ public class Account_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_);
+        accountViewModel = ((MyApplication) getApplication()).getAccountViewModel();
+        disposable = new CompositeDisposable();
     }
 
     public void bind() {
         progressBar.setVisibility(View.VISIBLE);
-        disposable.add(accountViewModel.getAccountDetail(((MyApplication) getApplication()).getSessionId())
+        disposable.add(accountViewModel.getAccountDetail(((MyApplication) getApplication()).getSessionID())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new AccountObserver()));
@@ -91,7 +93,6 @@ public class Account_Activity extends AppCompatActivity {
 
     public void onLogoutClick(View v) {
         ((MyApplication) getApplication()).setSessionId(null);
-        ((MyApplication) getApplication()).setToke(null);
         // thong bao logout
     }
 

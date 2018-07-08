@@ -1,35 +1,36 @@
 package com.example.lap60020_local.finalproject.ModelData.Params;
 
-public class SearchParams implements Params {
+public class GenreMovieParams implements Params {
+
     private int page;
     private int type;
-    private String text;
+    private int id;
 
-    public SearchParams(String text) {
-        this.text = text;
+    public GenreMovieParams(int id) {
+        this.id = id;
     }
 
-    public String getText() {
-        return text;
+    public int getId() {
+        return id;
     }
 
     @Override
     public int getPage() {
-        return page;
+        return 0;
     }
 
     @Override
     public void setPage(int page) {
-        this.page = page;
+
     }
 
     @Override
     public int getType() {
-        return type;
+        return 0;
     }
 
     @Override
     public void setType(int type) {
-        this.type = type;
+
     }
 }

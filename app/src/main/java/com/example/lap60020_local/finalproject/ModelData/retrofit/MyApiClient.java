@@ -1,6 +1,7 @@
 package com.example.lap60020_local.finalproject.ModelData.retrofit;
 
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MyApiClient {
@@ -14,6 +15,7 @@ public class MyApiClient {
             INSTANCE = new Retrofit
                     .Builder()
                     .baseUrl(BASE_URL)
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }

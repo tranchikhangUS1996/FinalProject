@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.lap60020_local.finalproject">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -18,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Ui.LoginActivity" />
-        <activity android:name=".Ui.detailActivity" />
+        <activity android:name=".Ui.DetailActivity" />
         <activity android:name=".Ui.Account_Activity" />
         <activity android:name=".Ui.SearchActivity">
             <meta-data
