@@ -37,7 +37,7 @@ public class ReviewListActivity extends AppCompatActivity {
 //        rvContacts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-//                Intent intent = new Intent(ReviewListActivity.this, ReviewDetail.class);
+//                Intent intent = new Intent(ReviewListActivity.this, ReviewDetailActivity.class);
 //                intent.putExtra("name", arr_ds.get(position).getTen().toString());
 //                intent.putExtra("content", arr_ds.get(position).getContent().toString());
 //                startActivity(intent);

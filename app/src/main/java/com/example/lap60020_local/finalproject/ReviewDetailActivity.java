@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import java.util.Random;
 
-public class ReviewDetail extends AppCompatActivity {
+public class ReviewDetailActivity extends AppCompatActivity {
 
     TextView tvTen, tvContent;
 
