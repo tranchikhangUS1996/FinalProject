@@ -1,8 +1,18 @@
 package com.example.lap60020_local.finalproject.ModelData.Params;
 
-public class WatchListParams implements Params {
-    private int page;
+public class UserMovieParam implements Params {
+
     private int type;
+    private int page;
+    private String sessionID;
+
+    public UserMovieParam(String sessionID) {
+        this.sessionID = sessionID;
+    }
+
+    public String getSessionID() {
+        return sessionID;
+    }
 
     @Override
     public int getPage() {

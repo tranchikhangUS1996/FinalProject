@@ -8,7 +8,7 @@ import io.reactivex.subjects.BehaviorSubject;
 
 public class DetailViewModel {
 
-    private static int ID;
+    private static Movie ID;
     private IDetailRepository repository;
     private BehaviorSubject<Integer> subject = BehaviorSubject.create();
 
@@ -16,19 +16,19 @@ public class DetailViewModel {
         this.repository = repository;
     }
 
-    public static void setId(int id){
+    public static void setId(Movie id){
          ID = id;
     }
 
-    public static int getID() {
+    public static Movie getID() {
         return ID;
     }
 
     public Observable<Movie> setDataStream() {
-        return repository.getData(ID);
+        return repository.getData(ID.getId());
     }
 
     public void bindData(){
-        subject.onNext(ID);
+        subject.onNext(ID.getId());
     }
 }

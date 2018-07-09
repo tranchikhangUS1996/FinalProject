@@ -102,6 +102,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
     @Override
     public void loadMore() {
+        adapter.addLoading();
         disposable.add(moviesViewModel.loadMoreData(new SearchParams(mSearch.getQuery().toString()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -119,11 +120,13 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         @Override
         public void onError(Throwable e) {
             progressBar.setVisibility(View.INVISIBLE);
+            adapter.removeLoading();
         }
 
         @Override
         public void onComplete() {
             moviesViewModel.acceptLoad();
+            adapter.removeLoading();
             progressBar.setVisibility(View.INVISIBLE);
         }
     }
@@ -131,6 +134,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     @Override
     public boolean onQueryTextSubmit(String query) {
         onScroll(0);
+        progressBar.setVisibility(View.VISIBLE);
         disposable.add(moviesViewModel.loadData(new SearchParams(query))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

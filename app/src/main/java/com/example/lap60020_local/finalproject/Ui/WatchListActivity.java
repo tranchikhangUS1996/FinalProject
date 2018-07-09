@@ -38,9 +38,6 @@ public class WatchListActivity extends AppCompatActivity implements LoadMoreNoti
     @BindView(R.id.watchlist_activity_recyclerview)
     RecyclerView recyclerView;
     @Nullable
-    @BindView(R.id.watchlist_activity_progressbar)
-    ProgressBar progressBar;
-    @Nullable
     @BindView(R.id.watchlist_activity_toolbar)
     Toolbar toolbar;
     private VerticalListAdapter adapter;
@@ -61,8 +58,6 @@ public class WatchListActivity extends AppCompatActivity implements LoadMoreNoti
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(linearLayoutManager);
         adapter = new VerticalListAdapter(this, this, recyclerView);
         String type = getIntent().getExtras().getString("Type");
         IListRepository iListRepository = ListRepositoryFactory.get(type);
@@ -90,6 +85,7 @@ public class WatchListActivity extends AppCompatActivity implements LoadMoreNoti
 
     @Override
     public void loadMore() {
+        adapter.addLoading();
         disposable.add(moviesViewModel.loadMoreData(params)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -97,6 +93,7 @@ public class WatchListActivity extends AppCompatActivity implements LoadMoreNoti
     }
 
     public void bind() {
+        adapter.addLoading();
         disposable.add(moviesViewModel.loadData(params)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -112,17 +109,19 @@ public class WatchListActivity extends AppCompatActivity implements LoadMoreNoti
         @Override
         public void onNext(ObservableListData data) {
             adapter.receiveData(data.getData(), data.getSeePossition());
+            moviesViewModel.acceptLoad();
         }
 
         @Override
         public void onError(Throwable e) {
-            progressBar.setVisibility(View.INVISIBLE);
+            adapter.removeLoading();
             Log.e("WatchListObserver", e.getMessage());
+            moviesViewModel.acceptLoad();
         }
 
         @Override
         public void onComplete() {
-            progressBar.setVisibility(View.INVISIBLE);
+            adapter.removeLoading();
         }
     }
 }

@@ -16,6 +16,7 @@
         android:layout_height="wrap_content" />
 
     <EditText
+        android:text="tranchikhang"
         android:textStyle="italic"
         android:drawableLeft="@drawable/username"
         android:layout_marginLeft="18dp"
@@ -30,6 +31,7 @@
         android:layout_height="wrap_content" />
 
     <EditText
+        android:text="khang0979589455"
         android:textStyle="italic"
         android:drawableLeft="@drawable/password"
         android:layout_marginLeft="18dp"

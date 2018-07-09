@@ -27,6 +27,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.lap60020_local.finalproject.ModelData.Entity.Genre;
+import com.example.lap60020_local.finalproject.ModelData.retrofit.MyApiClient;
 import com.example.lap60020_local.finalproject.MyApplication;
 import com.example.lap60020_local.finalproject.R;
 import com.example.lap60020_local.finalproject.Ui.Adapter.GenrelistAdapter;
@@ -135,10 +136,20 @@ public class MainActivity extends AppCompatActivity {
         MenuItem accountItem = menu.findItem(R.id.main_menu_account);
         mAccountImage = (ImageView) accountItem.getActionView();
         mAccountImage.setOnClickListener(v->{
-            Intent intent = new Intent(this, Account_Activity.class);
+            Intent intent;
+            if(((MyApplication) getApplication()).getSessionID().isEmpty()){
+                intent = new Intent(this, LoginActivity.class);
+            } else {
+                intent = new Intent(this, Account_Activity.class);
+            }
             startActivity(intent);
         });
-        mAccountImage.setImageResource(R.drawable.usernotlogin);
+        if (((MyApplication) getApplication()).getSessionID().isEmpty()) {
+            mAccountImage.setImageResource(R.drawable.usernotlogin);
+        }
+        else {
+            mAccountImage.setImageResource(R.drawable.userlogined);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 

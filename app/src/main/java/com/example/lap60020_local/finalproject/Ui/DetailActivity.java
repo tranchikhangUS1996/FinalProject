@@ -1,5 +1,6 @@
 package com.example.lap60020_local.finalproject.Ui;
 
+import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -7,21 +8,31 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.lap60020_local.finalproject.GlideApp;
+import com.example.lap60020_local.finalproject.ModelData.Entity.FavouriteResponse;
 import com.example.lap60020_local.finalproject.ModelData.Entity.Movie;
 import com.example.lap60020_local.finalproject.ModelData.Entity.ObservableListData;
+import com.example.lap60020_local.finalproject.ModelData.Entity.RateResponse;
 import com.example.lap60020_local.finalproject.ModelData.Params.RecommendParams;
 import com.example.lap60020_local.finalproject.ModelData.Params.SimilarParams;
+import com.example.lap60020_local.finalproject.ModelData.Params.UserInteractParams;
 import com.example.lap60020_local.finalproject.ModelData.retrofit.MyApiClient;
 import com.example.lap60020_local.finalproject.MyApplication;
 import com.example.lap60020_local.finalproject.R;
 import com.example.lap60020_local.finalproject.Ui.Adapter.HorizontalListAdapter;
+import com.example.lap60020_local.finalproject.ViewModel.AddToWatchListViewModel;
 import com.example.lap60020_local.finalproject.ViewModel.DetailViewModel;
+import com.example.lap60020_local.finalproject.ViewModel.MaskAsFavoriteViewModel;
 import com.example.lap60020_local.finalproject.ViewModel.MoviesViewModel;
+import com.example.lap60020_local.finalproject.ViewModel.RateViewModel;
+
+import java.lang.ref.WeakReference;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,6 +40,7 @@ import butterknife.OnClick;
 import butterknife.Optional;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -74,26 +86,37 @@ public class DetailActivity extends AppCompatActivity {
     private DetailViewModel detailViewModel;
     private MoviesViewModel similarViewModel;
     private MoviesViewModel recommendViewModel;
-    private int id;
+    private RateViewModel rateViewModel;
+    private AddToWatchListViewModel addToWatchListViewModel;
+    private MaskAsFavoriteViewModel maskAsFavoriteViewModel;
+    private Movie id;
     private CompositeDisposable disposable;
     private HorizontalListAdapter SimilarAdapter;
     private HorizontalListAdapter RecommenedAdapter;
+    private Context context;
+    private String sessionId;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        ButterKnife.bind(this);
+        ButterKnife.bind(this,this);
         detailViewModel = ((MyApplication) getApplication()).getDetailViewModel();
         similarViewModel = ((MyApplication) getApplication()).getSimilarViewModel();
         recommendViewModel = ((MyApplication) getApplication()).getRecommendedViewModel();
+        rateViewModel = ((MyApplication) getApplication()).getRateViewModel();
         SimilarAdapter = new HorizontalListAdapter(similarRecyclerView ,this);
         RecommenedAdapter = new HorizontalListAdapter(recommendRecyclerView, this);
         disposable = new CompositeDisposable();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         id = DetailViewModel.getID();
+        context = this;
+        rateViewModel = ((MyApplication) getApplication()).getRateViewModel();
+        addToWatchListViewModel = ((MyApplication) getApplication()).getAddToWatchListViewModel();
+        maskAsFavoriteViewModel = ((MyApplication) getApplication()).getMaskAsFavoriteViewModel();
+        sessionId = ((MyApplication) getApplication()).getSessionID();
     }
 
     @Override
@@ -117,13 +140,13 @@ public class DetailActivity extends AppCompatActivity {
         detailViewModel.bindData();
 
         RecomendProgressbar.setVisibility(View.VISIBLE);
-        disposable.add(recommendViewModel.loadData(new RecommendParams(id))
+        disposable.add(recommendViewModel.loadData(new RecommendParams(id.getId()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new RecommendObserver()));
 
         SimilarProgressbar.setVisibility(View.VISIBLE);
-        disposable.add(similarViewModel.loadData(new SimilarParams(id))
+        disposable.add(similarViewModel.loadData(new SimilarParams(id.getId()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new SimilarObserver()));
@@ -216,16 +239,122 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-    @Optional
-    @OnClick(R.id.detail_watch_list)
-    public void onWatchlistClick(View v) {
+//    @Optional
+//    @OnClick(R.id.detail_watch_list)
+    public void onDetailWatchlistClick(View v) {
+        UserInteractParams userInteractParams = new UserInteractParams(!id.isWatchlist(),sessionId, id.getId());
+        disposable.add(addToWatchListViewModel.add(userInteractParams)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new WatchListConsumer(new WeakReference<>(v))));
+    }
 
+    public class WatchListConsumer extends DisposableObserver<FavouriteResponse> {
+
+        WeakReference<View> weakReference;
+
+        public WatchListConsumer(WeakReference<View> weakReference) {
+            this.weakReference = weakReference;
+        }
+
+        @Override
+        public void onNext(FavouriteResponse favouriteResponse)  {
+            if(weakReference != null && weakReference.get() != null) {
+                ImageView imageView = (ImageView) weakReference.get();
+                if(favouriteResponse.statusCode == 12) {
+                    if(id.isWatchlist()) {
+                        imageView.setImageResource(R.drawable.addwatchlist);
+                    } else {
+                        imageView.setImageResource(R.drawable.addedwatchlist);
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Toast.makeText(context, e.getMessage().toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+    }
+
+    public class FavouriteConsumer extends DisposableObserver<FavouriteResponse> {
+
+        WeakReference<View> weakReference;
+
+        public FavouriteConsumer(WeakReference<View> weakReference) {
+            this.weakReference = weakReference;
+        }
+
+        @Override
+        public void onNext(FavouriteResponse favouriteResponse) {
+            if(weakReference != null && weakReference.get() != null) {
+                ImageView imageView = (ImageView) weakReference.get();
+                if(favouriteResponse.statusCode == 12) {
+                    if(id.isFavorite()) {
+                        imageView.setImageResource(R.drawable.favorite);
+                    } else {
+                        imageView.setImageResource(R.drawable.favourited);
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Toast.makeText(context, e.getMessage().toString(),Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+    }
+
+    public class RatingConsumer extends DisposableObserver<FavouriteResponse> {
+
+        WeakReference<View> weakReference;
+
+        public RatingConsumer(WeakReference<View> weakReference) {
+            this.weakReference = weakReference;
+        }
+
+        @Override
+        public void onNext(FavouriteResponse favouriteResponse) {
+            if(weakReference != null && weakReference.get() != null) {
+                ImageView imageView = (ImageView) weakReference.get();
+                if(favouriteResponse.statusCode == 1) {
+                    if(id.isRated()) {
+                        imageView.setImageResource(R.drawable.you_unrate);
+                    } else {
+                        imageView.setImageResource(R.drawable.my_rated);
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Toast.makeText(context, e.getMessage().toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
     }
 
     @Optional
     @OnClick(R.id.detail_my_favourite)
     public void onFavoriteClick(View v) {
-
+        UserInteractParams userInteractParams = new UserInteractParams(!id.isFavorite(), sessionId, id.getId());
+        disposable.add(maskAsFavoriteViewModel.mask(userInteractParams).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new FavouriteConsumer(new WeakReference<>(v))));
     }
 
     @Optional

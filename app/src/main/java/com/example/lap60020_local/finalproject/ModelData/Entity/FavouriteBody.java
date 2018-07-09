@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 public class FavouriteBody {
     @SerializedName("media_type")
     @Expose
-    private final String media_type = "movie";
+    private String media_type = "movie";
     @SerializedName("media_id")
     @Expose
     private int media_id;

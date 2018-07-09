@@ -42,15 +42,10 @@ public class LoginActivity extends AppCompatActivity {
         disposable = new CompositeDisposable();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        bind();
-    }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         unbind();
     }
 
@@ -64,15 +59,12 @@ public class LoginActivity extends AppCompatActivity {
     @OnClick(R.id.login_signin)
     public void onSignin(View v) {
         LoginParams params = new LoginParams(username.getText().toString(),password.getText().toString());
-        loginViewModel.login(params);
-    }
-
-    public void bind() {
-        disposable.add(loginViewModel.loginStream()
+        disposable.add(loginViewModel.login(params)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new LoginObserver()));
     }
+
 
     public void unbind() {
         disposable.clear();
@@ -84,6 +76,7 @@ public class LoginActivity extends AppCompatActivity {
         public void onNext(AuthenticationSessionID authenticationSessionID) {
             MyApplication application = (MyApplication) getApplication();
             application.setSessionId(authenticationSessionID.sessionId);
+            finish();
         }
 
         @Override

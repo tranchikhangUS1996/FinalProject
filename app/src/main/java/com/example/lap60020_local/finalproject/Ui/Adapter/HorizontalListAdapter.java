@@ -56,7 +56,7 @@ public class HorizontalListAdapter extends RecyclerView.Adapter {
         Movie movie = Movies.get(position);
         MySingleViewholder singleViewholder = (MySingleViewholder) holder;
         singleViewholder.date.setText(movie.getReleaseDate());
-        singleViewholder.cardView.setOnClickListener(new onCardClick(movie.getId()));
+        singleViewholder.cardView.setOnClickListener(new onCardClick(movie));
         if(movie.isWatchlist()) {
             singleViewholder.watchlist.setImageResource(R.drawable.added);
         }

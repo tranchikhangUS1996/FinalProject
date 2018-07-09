@@ -16,21 +16,21 @@ public class GenreMovieParams implements Params {
 
     @Override
     public int getPage() {
-        return 0;
+        return page;
     }
 
     @Override
     public void setPage(int page) {
-
+        this.page = page;
     }
 
     @Override
     public int getType() {
-        return 0;
+        return type;
     }
 
     @Override
     public void setType(int type) {
-
+        this.type = type;
     }
 }

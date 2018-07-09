@@ -8,6 +8,7 @@ import com.example.lap60020_local.finalproject.ModelData.retrofit.MovieAPI;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 public abstract class AbstracChangedListRepository implements IListRepository {

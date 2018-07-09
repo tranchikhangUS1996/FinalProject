@@ -115,7 +115,7 @@ public class VerticalListAdapter extends RecyclerView.Adapter {
         if(holder instanceof MySingleViewholder) {
             MySingleViewholder singleViewholder = (MySingleViewholder) holder;
             singleViewholder.date.setText(movie.getReleaseDate());
-            singleViewholder.cardView.setOnClickListener(new onCardClick(movie.getId()));
+            singleViewholder.cardView.setOnClickListener(new onCardClick(movie));
             if(movie.isWatchlist()) {
                 singleViewholder.watchlist.setImageResource(R.drawable.added);
             }
@@ -133,7 +133,7 @@ public class VerticalListAdapter extends RecyclerView.Adapter {
             myViewHolder.rate.setText(String.valueOf(movie.getVoteAverage()));
             myViewHolder.releaseDate.setText(movie.getReleaseDate());
             myViewHolder.review.setText(movie.getOverview());
-            myViewHolder.cardView.setOnClickListener(new onCardClick(movie.getId()));
+            myViewHolder.cardView.setOnClickListener(new onCardClick(movie));
             if(movie.isWatchlist()) {
                 myViewHolder.WatchlistImage.setImageResource(R.drawable.added);
             }

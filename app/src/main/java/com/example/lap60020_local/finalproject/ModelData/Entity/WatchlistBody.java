@@ -6,15 +6,15 @@ import com.google.gson.annotations.SerializedName;
 public class WatchlistBody {
     @SerializedName("media_type")
     @Expose
-    private final String media_type = "movie";
+    private String media_type = "movie";
     @SerializedName("media_id")
     @Expose
-    private int media_id;
+    private Integer media_id;
     @SerializedName("watchlist")
     @Expose
-    private boolean watchlist;
+    private Boolean watchlist;
 
-    public WatchlistBody(int media_id, boolean watchlist) {
+    public WatchlistBody(Integer media_id, Boolean watchlist) {
         this.media_id = media_id;
         this.watchlist = watchlist;
     }
@@ -23,19 +23,23 @@ public class WatchlistBody {
         return media_type;
     }
 
-    public int getMedia_id() {
+    public void setMedia_type(String media_type) {
+        this.media_type = media_type;
+    }
+
+    public Integer getMedia_id() {
         return media_id;
     }
 
-    public void setMedia_id(int media_id) {
+    public void setMedia_id(Integer media_id) {
         this.media_id = media_id;
     }
 
-    public boolean isWatchlist() {
+    public Boolean getWatchlist() {
         return watchlist;
     }
 
-    public void setWatchlist(boolean watchlist) {
+    public void setWatchlist(Boolean watchlist) {
         this.watchlist = watchlist;
     }
 }
