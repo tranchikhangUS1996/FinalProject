@@ -1,5 +1,6 @@
 package com.example.lap60020_local.finalproject.Ui;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -236,7 +238,28 @@ public class DetailActivity extends AppCompatActivity {
     @Optional
     @OnClick({R.id.detail_my_rate_image})
     public void onMyRateClick(View v) {
+//        Toast.makeText(this.context, "helloasdfasdf", Toast.LENGTH_SHORT).show();
+        Dialog rankDialog = new Dialog(DetailActivity.this, R.style.FullHeightDialog);
+        rankDialog.setContentView(R.layout.rank_dialog);
+        rankDialog.setCancelable(true);
+        RatingBar ratingBar = (RatingBar) rankDialog.findViewById(R.id.dialog_ratingbar);
+        //set userRankedValue here
+        ratingBar.setRating(1);
 
+        TextView text = (TextView) rankDialog.findViewById(R.id.rank_dialog_text1);
+        text.setText("Rate this movie");
+
+        Button updateButton = (Button) rankDialog.findViewById(R.id.rank_dialog_button);
+        updateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //update userRankedValue here
+//                rateViewModel.rate(ratingBar.getRating());
+                Toast.makeText(getBaseContext(), "Updated rate value", Toast.LENGTH_SHORT).show();
+                rankDialog.dismiss();
+            }
+        });
+        rankDialog.show();
     }
 
 //    @Optional
